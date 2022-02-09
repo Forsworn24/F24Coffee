@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">F24Coffee</string>
+    <string name="home">HOME</string>
+    <string name="coffee">COFFEE</string>
+    <string name="card">CARD</string>
+    <string name="account">ACCOUNT</string>
+    <string name="clearCard">CLEAR CARD</string>
+    <string name="totalOrder">TOTAL:</string>
+    <string name="checkout">CHECKOUT</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="rub">RUB</string>
+</resources>
