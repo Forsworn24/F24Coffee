@@ -2,19 +2,22 @@ package mudinov.ali.f24coffee.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import mudinov.ali.f24coffee.R
 import mudinov.ali.f24coffee.databinding.ActivityMainBinding
+import mudinov.ali.f24coffee.presentation.viewModel.CardViewModel
 import mudinov.ali.f24coffee.presentation.viewModel.CoffeeViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private var binding: ActivityMainBinding? = null
-
     private val coffeeViewModel: CoffeeViewModel by viewModel()
+    private val cardViewModel: CardViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding?.topMainMenu)
 
+        loadCoffeeToCard()
 
         supportFragmentManager.beginTransaction().replace(R.id.mainContent, Home()).commit()
 
@@ -44,5 +48,18 @@ class MainActivity : AppCompatActivity() {
 
         }
         binding?.bottomMainMenu?.selectedItemId = R.id.homeBottomMainMenu
+    }
+
+    private fun loadCoffeeToCard (){
+
+        cardViewModel.loadCoffeeFromCard.observe(this, Observer {
+
+            val count = it.count()
+            val badge = binding?.bottomMainMenu?.getOrCreateBadge(R.id.cardBottomMainMenu)
+
+            badge?.isVisible = count > 0
+            badge?.number = count
+        })
+
     }
 }
