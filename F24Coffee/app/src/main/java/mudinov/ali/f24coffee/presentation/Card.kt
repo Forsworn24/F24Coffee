@@ -11,20 +11,41 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import mudinov.ali.f24coffee.R
 import mudinov.ali.f24coffee.databinding.CardBinding
+import mudinov.ali.f24coffee.presentation.viewModel.CardViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class Card : Fragment(), View.OnClickListener {
 
     private var binding: CardBinding? = null
+    private var cardAdapter: CardAdapter? = null
+    private val cardViewModel: CardViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.card, container, false)
 
+        initRecyclerCard()
+        loadCoffeeFromCard()
         return binding?.root
+    }
+
+    private fun initRecyclerCard() {
+
+        binding?.listCard?.layoutManager =
+            LinearLayoutManager(context)
+        cardAdapter = cardAdapter
+        binding?.listCard?.adapter = cardAdapter
+
+    }
+
+    private fun loadCoffeeFromCard() {
+
+        cardViewModel.loadCoffeeFromCard.observe(viewLifecycleOwner, Observer {
+            cardAdapter?.setList(it)
+            cardAdapter?.notifyDataSetChanged()
+        })
     }
 
     override fun onClick(v: View?) {

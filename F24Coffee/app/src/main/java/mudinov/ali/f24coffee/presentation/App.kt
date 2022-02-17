@@ -2,6 +2,7 @@ package mudinov.ali.f24coffee.presentation
 
 import android.app.Application
 import mudinov.ali.f24coffee.BuildConfig
+import mudinov.ali.f24coffee.presentation.di.card
 import mudinov.ali.f24coffee.presentation.di.coffee
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -19,7 +20,7 @@ class App: Application() {
             //inject Android context
             androidContext(this@App)
 
-            modules(coffee)
+            modules(coffee, card)
         }
     }
 }
