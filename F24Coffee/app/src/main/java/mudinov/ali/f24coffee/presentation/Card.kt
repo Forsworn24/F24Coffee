@@ -40,9 +40,16 @@ class Card : Fragment(), View.OnClickListener {
 
         binding?.listCard?.layoutManager =
             LinearLayoutManager(context)
-        cardAdapter = CardAdapter { cardModel: CardModel ->
-            deleteFromCard(cardModel)
-        }
+        cardAdapter = CardAdapter ({ cardModel: CardModel ->
+            deleteFromCard(cardModel)}, { cardModel: CardModel ->
+            lessCount(
+                cardModel
+            )
+        }, { cardModel: CardModel ->
+            moreCount(
+                cardModel
+            )
+        })
         binding?.listCard?.adapter = cardAdapter
 
     }
@@ -52,6 +59,10 @@ class Card : Fragment(), View.OnClickListener {
         cardViewModel.loadCoffeeFromCard.observe(viewLifecycleOwner, Observer {
             cardAdapter?.setList(it)
             cardAdapter?.notifyDataSetChanged()
+
+            val total:Int = it.sumOf<CardModel> { it.totalPrice.toInt() }
+
+            binding?.totalOrder?.text = total.toString()
         })
     }
 
@@ -70,5 +81,41 @@ class Card : Fragment(), View.OnClickListener {
 
     private fun deleteFromCard(cardModel: CardModel) {
         cardViewModel.deleteProductFromCard(cardModel.id)
+    }
+
+    private fun lessCount(cardModel:CardModel) {
+
+        var count: Int = cardModel.count.toInt()
+        count--
+
+        if (count<1) {
+            cardViewModel.updateProductToCard(
+                CardModel(cardModel.id, cardModel.name,
+                    cardModel.image, cardModel.price, cardModel.idProduct, "1",
+                    (cardModel.price.toInt()*1).toString())
+            )
+
+        }
+        else {
+
+            cardViewModel.updateProductToCard(
+                CardModel(cardModel.id, cardModel.name,
+                    cardModel.image, cardModel.price, cardModel.idProduct, count.toString(),
+                    (cardModel.price.toInt()*count).toString())
+            )
+
+        }
+    }
+
+    private fun moreCount(cardModel:CardModel) {
+
+        var count: Int = cardModel.count.toInt()
+        count++
+
+        cardViewModel.updateProductToCard(
+            CardModel(cardModel.id, cardModel.name,
+                cardModel.image, cardModel.price, cardModel.idProduct, count.toString(),
+                (cardModel.price.toInt()*count).toString())
+        )
     }
 }

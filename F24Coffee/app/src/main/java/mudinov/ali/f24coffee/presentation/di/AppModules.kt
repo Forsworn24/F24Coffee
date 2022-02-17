@@ -7,14 +7,19 @@ import mudinov.ali.f24coffee.data.dataSourceIMPL.CoffeeApiDataSourceIMPL
 import mudinov.ali.f24coffee.data.dataSourceIMPL.CoffeeDataSourceIMPL
 import mudinov.ali.f24coffee.data.localDB.CardDB
 import mudinov.ali.f24coffee.data.localDB.CofDB
+import mudinov.ali.f24coffee.data.localDB.OrDB
 import mudinov.ali.f24coffee.data.repository.CardRepository
 import mudinov.ali.f24coffee.data.repository.CoffeeRepository
+import mudinov.ali.f24coffee.data.repository.OrderLocalRepository
 import mudinov.ali.f24coffee.domain.repository.CardCall
 import mudinov.ali.f24coffee.domain.repository.CoffeeCall
+import mudinov.ali.f24coffee.domain.repository.OrderLocalCall
 import mudinov.ali.f24coffee.domain.useCase.CardUseCase
 import mudinov.ali.f24coffee.domain.useCase.CoffeeUseCase
+import mudinov.ali.f24coffee.domain.useCase.OrderLocalUseCase
 import mudinov.ali.f24coffee.presentation.viewModel.CardViewModel
 import mudinov.ali.f24coffee.presentation.viewModel.CoffeeViewModel
+import mudinov.ali.f24coffee.presentation.viewModel.OrderLocalViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -62,5 +67,23 @@ val card = module{
     single { CardUseCase(get()) }
 
     viewModel { CardViewModel(get()) }
+
+}
+
+val order = module{
+
+    single {
+        Room.databaseBuilder(androidContext(), OrDB::class.java,
+            "dbOr").build()
+    }
+
+    single { get<OrDB>().orderLocalDao }
+
+
+    single<OrderLocalCall> { OrderLocalRepository(get()) }
+
+    single { OrderLocalUseCase(get()) }
+
+    viewModel { OrderLocalViewModel(get()) }
 
 }

@@ -10,7 +10,8 @@ import mudinov.ali.f24coffee.R
 import mudinov.ali.f24coffee.data.models.CardModel
 import mudinov.ali.f24coffee.databinding.CardItemBinding
 
-class CardAdapter (private val deleteFromCard:(CardModel)-> Unit):
+class CardAdapter (private val deleteFromCard:(CardModel)-> Unit, private val lessCount:(CardModel)->Unit,
+                   private val moreCount:(CardModel)->Unit):
     RecyclerView.Adapter<CardAdapter.CardHolder>() {
 
     private val productsFromCard = ArrayList<CardModel>()
@@ -23,7 +24,7 @@ class CardAdapter (private val deleteFromCard:(CardModel)-> Unit):
     }
 
     override fun onBindViewHolder(holder: CardHolder, position: Int) {
-        holder.bind(productsFromCard[position], deleteFromCard)
+        holder.bind(productsFromCard[position], deleteFromCard, moreCount, lessCount)
     }
 
     override fun getItemCount(): Int {
@@ -36,7 +37,8 @@ class CardAdapter (private val deleteFromCard:(CardModel)-> Unit):
     }
 
     class CardHolder(val binding: CardItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(cardModel: CardModel, deleteFromCard: (CardModel) -> Unit)
+        fun bind(cardModel: CardModel, deleteFromCard: (CardModel) -> Unit, moreCount: (CardModel) -> Unit,
+                 lessCount: (CardModel) -> Unit)
         {
 
             val getImage = cardModel.image
@@ -44,11 +46,19 @@ class CardAdapter (private val deleteFromCard:(CardModel)-> Unit):
             binding.nameProductCard.text = cardModel.name
             binding.countProductBasket.text = cardModel.count
             binding.priceProductCard.text = cardModel.price
+            binding.totalPriceProductCard.text = cardModel.totalPrice
 
-            binding.removeFromCardProductCard?.setOnClickListener(View.OnClickListener {
+            binding.removeFromCardProductCard.setOnClickListener(View.OnClickListener {
                 deleteFromCard(cardModel)
             })
 
+            binding.moreProductBasket.setOnClickListener(View.OnClickListener {
+                moreCount(cardModel)
+            })
+
+            binding.lessProductBasket.setOnClickListener(View.OnClickListener {
+                lessCount(cardModel)
+            })
         }
 
 
