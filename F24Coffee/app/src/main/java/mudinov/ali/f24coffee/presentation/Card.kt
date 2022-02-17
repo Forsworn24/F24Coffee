@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import mudinov.ali.f24coffee.R
+import mudinov.ali.f24coffee.data.models.CardModel
+import mudinov.ali.f24coffee.data.models.CoffeeModel
 import mudinov.ali.f24coffee.databinding.CardBinding
 import mudinov.ali.f24coffee.presentation.viewModel.CardViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,6 +30,9 @@ class Card : Fragment(), View.OnClickListener {
 
         initRecyclerCard()
         loadCoffeeFromCard()
+
+        binding?.clearCard?.setOnClickListener(this)
+        binding?.checkoutCard?.setOnClickListener(this)
         return binding?.root
     }
 
@@ -35,7 +40,9 @@ class Card : Fragment(), View.OnClickListener {
 
         binding?.listCard?.layoutManager =
             LinearLayoutManager(context)
-        cardAdapter = CardAdapter()
+        cardAdapter = CardAdapter { cardModel: CardModel ->
+            deleteFromCard(cardModel)
+        }
         binding?.listCard?.adapter = cardAdapter
 
     }
@@ -49,7 +56,19 @@ class Card : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        TODO("Not yet implemented")
+        when(v?.id) {
+            R.id.clearCard -> cardViewModel.clearCard()
+
+            R.id.checkoutCard -> {
+
+                val checkout = Checkout()
+                checkout.show((context as FragmentActivity).supportFragmentManager, "checkout")
+
+            }
+        }
     }
 
+    private fun deleteFromCard(cardModel: CardModel) {
+        cardViewModel.deleteProductFromCard(cardModel.id)
+    }
 }

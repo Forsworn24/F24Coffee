@@ -1,6 +1,7 @@
 package mudinov.ali.f24coffee.presentation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +10,7 @@ import mudinov.ali.f24coffee.R
 import mudinov.ali.f24coffee.data.models.CardModel
 import mudinov.ali.f24coffee.databinding.CardItemBinding
 
-class CardAdapter ():
+class CardAdapter (private val deleteFromCard:(CardModel)-> Unit):
     RecyclerView.Adapter<CardAdapter.CardHolder>() {
 
     private val productsFromCard = ArrayList<CardModel>()
@@ -22,7 +23,7 @@ class CardAdapter ():
     }
 
     override fun onBindViewHolder(holder: CardHolder, position: Int) {
-        holder.bind(productsFromCard[position])
+        holder.bind(productsFromCard[position], deleteFromCard)
     }
 
     override fun getItemCount(): Int {
@@ -35,7 +36,7 @@ class CardAdapter ():
     }
 
     class CardHolder(val binding: CardItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(cardModel: CardModel)
+        fun bind(cardModel: CardModel, deleteFromCard: (CardModel) -> Unit)
         {
 
             val getImage = cardModel.image
@@ -43,6 +44,10 @@ class CardAdapter ():
             binding.nameProductCard.text = cardModel.name
             binding.countProductBasket.text = cardModel.count
             binding.priceProductCard.text = cardModel.price
+
+            binding.removeFromCardProductCard?.setOnClickListener(View.OnClickListener {
+                deleteFromCard(cardModel)
+            })
 
         }
 
