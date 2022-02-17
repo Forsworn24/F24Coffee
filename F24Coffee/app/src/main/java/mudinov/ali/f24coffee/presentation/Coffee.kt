@@ -10,8 +10,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import mudinov.ali.f24coffee.R
+import mudinov.ali.f24coffee.data.models.CardModel
 import mudinov.ali.f24coffee.data.models.CoffeeModel
 import mudinov.ali.f24coffee.databinding.CoffeeBinding
+import mudinov.ali.f24coffee.presentation.di.card
+import mudinov.ali.f24coffee.presentation.di.coffee
+import mudinov.ali.f24coffee.presentation.viewModel.CardViewModel
 import mudinov.ali.f24coffee.presentation.viewModel.CoffeeViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,6 +24,7 @@ class Coffee : Fragment() {
     private var binding: CoffeeBinding? = null
     private var coffeeAdapter: CoffeeAdapter? = null
     private val coffeeViewModel: CoffeeViewModel by viewModel()
+    private val cardViewModel: CardViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +41,16 @@ class Coffee : Fragment() {
 
     private fun initRecyclerCoffee() {
         binding?.catalogCoffee?.layoutManager = LinearLayoutManager(context)
-        coffeeAdapter = CoffeeAdapter()
+        coffeeAdapter = CoffeeAdapter ({ coffeeModel: CoffeeModel ->
+            addToCard(coffeeModel)
+        }, { coffeeModel: CoffeeModel ->
+            removeFromCard(coffeeModel)
+        }, { idProduct:Int, addToBasket: AppCompatImageButton,
+             removeFromBasket:AppCompatImageButton ->
+            loadCoffeeToCardFromCardProduct(
+                idProduct, addToBasket, removeFromBasket
+            )
+        })
         binding?.catalogCoffee?.adapter = coffeeAdapter
     }
 
@@ -47,4 +61,29 @@ class Coffee : Fragment() {
         })
     }
 
+    private fun addToCard(coffeeModel: CoffeeModel) {
+        cardViewModel.startInsert(coffeeModel.name, coffeeModel.image, coffeeModel.price, coffeeModel.id.toString(), "1")
+    }
+
+    private fun removeFromCard(coffeeModel: CoffeeModel) {
+        cardViewModel.deleteProductToCardFromCardProduct(coffeeModel.id.toString())
+    }
+
+    private fun loadCoffeeToCardFromCardProduct (idProduct:Int, addToBasket: AppCompatImageButton,
+                                                 removeFromBasket:AppCompatImageButton){
+
+        cardViewModel.loadCoffeeToCardFromCardProduct(idProduct.toString()).observe(viewLifecycleOwner, Observer {
+
+            val count = it.count()
+
+            if (count>0) {
+                addToBasket.visibility = View.GONE
+                removeFromBasket.visibility = View.VISIBLE
+            }
+            else {
+                addToBasket.visibility = View.VISIBLE
+                removeFromBasket.visibility = View.GONE }
+        })
+
+    }
 }

@@ -8,10 +8,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import mudinov.ali.f24coffee.R
+import mudinov.ali.f24coffee.data.models.CardModel
 import mudinov.ali.f24coffee.data.models.CoffeeModel
 import mudinov.ali.f24coffee.databinding.CoffeeItemBinding
 
-class CoffeeAdapter():
+class CoffeeAdapter(private val addToCard:(CoffeeModel)-> Unit, private val removeFromCard:(CoffeeModel)-> Unit,
+                    private val loadCoffeeToCardFromCardProduct:(Int, AppCompatImageButton, AppCompatImageButton) -> Unit):
     RecyclerView.Adapter<CoffeeAdapter.CoffeeHolder>() {
 
     private val coffee = ArrayList<CoffeeModel>()
@@ -24,7 +26,7 @@ class CoffeeAdapter():
     }
 
     override fun onBindViewHolder(holder: CoffeeHolder, position: Int) {
-        holder.bind(coffee[position])
+        holder.bind(coffee[position], addToCard, removeFromCard, loadCoffeeToCardFromCardProduct)
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +39,9 @@ class CoffeeAdapter():
     }
 
     class CoffeeHolder(val binding: CoffeeItemBinding):RecyclerView.ViewHolder(binding.root) {
-        fun bind(coffeeModel: CoffeeModel)
+        fun bind(coffeeModel: CoffeeModel, addToCard: (CoffeeModel) -> Unit,
+                 removeFromCard: (CoffeeModel) -> Unit,
+                 loadCoffeeToCardFromCardProduct:(Int, AppCompatImageButton, AppCompatImageButton) -> Unit)
         {
 
             val getImage = coffeeModel.image
@@ -46,6 +50,16 @@ class CoffeeAdapter():
             binding.descriptionCoffee.text = coffeeModel.description
             binding.priceCoffee.text = coffeeModel.price
 
+            binding.addToCard.setOnClickListener(View.OnClickListener {
+                addToCard(coffeeModel)
+            })
+
+            binding.removeFromCard.setOnClickListener(View.OnClickListener {
+                //addToCard(coffeeModel)
+                removeFromCard(coffeeModel)
+            })
+
+            loadCoffeeToCardFromCardProduct(coffeeModel.id, binding.addToCard, binding.removeFromCard)
         }
 
 

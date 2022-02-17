@@ -35,7 +35,7 @@ class Card : Fragment(), View.OnClickListener {
 
         binding?.listCard?.layoutManager =
             LinearLayoutManager(context)
-        cardAdapter = cardAdapter
+        cardAdapter = CardAdapter()
         binding?.listCard?.adapter = cardAdapter
 
     }
