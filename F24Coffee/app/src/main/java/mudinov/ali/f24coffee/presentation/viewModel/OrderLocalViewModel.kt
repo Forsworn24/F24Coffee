@@ -19,4 +19,11 @@ class OrderLocalViewModel (private val orderLocalUseCase: OrderLocalUseCase): Vi
 
         orderLocalUseCase.insert(orderLocalModel)
     }
+
+    val loadOrder = orderLocalUseCase.loadOrder()
+
+    fun clearOrders() = viewModelScope.launch{
+
+        orderLocalUseCase.clear()
+    }
 }

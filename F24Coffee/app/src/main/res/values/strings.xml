@@ -7,6 +7,10 @@
     <string name="clearCard">CLEAR CARD</string>
     <string name="totalOrder">TOTAL:</string>
     <string name="checkout">CHECKOUT</string>
+    <string name="yourName">Your Name</string>
+    <string name="yourPhone">Your Phone</string>
+    <string name="submit">SUBMIT</string>
+    <string name="clearOrders">CLEAR ORDERS</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
