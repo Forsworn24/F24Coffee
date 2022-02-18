@@ -2,15 +2,17 @@ package mudinov.ali.f24coffee.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import mudinov.ali.f24coffee.R
 import mudinov.ali.f24coffee.databinding.ActivityMainBinding
-import mudinov.ali.f24coffee.presentation.viewModel.CardViewModel
-import mudinov.ali.f24coffee.presentation.viewModel.CoffeeViewModel
+import mudinov.ali.f24coffee.presentation.Tabs.Account.Account
+import mudinov.ali.f24coffee.presentation.Tabs.Card.Card
+import mudinov.ali.f24coffee.presentation.Tabs.Coffee.Coffee
+import mudinov.ali.f24coffee.presentation.Tabs.Home
+import mudinov.ali.f24coffee.presentation.viewModels.CardViewModel
+import mudinov.ali.f24coffee.presentation.viewModels.CoffeeViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {

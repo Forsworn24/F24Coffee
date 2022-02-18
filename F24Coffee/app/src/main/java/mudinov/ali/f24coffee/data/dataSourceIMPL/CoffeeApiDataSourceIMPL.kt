@@ -26,7 +26,7 @@ class CoffeeApiDataSourceIMPL(private val coffeeDataSource: CoffeeDataSource): C
 
                 loadCoffee?.clear()
 
-                loadCoffee = (response.body() as ArrayList<CoffeeApiModel>?)!!
+                loadCoffee = (response.body())!!
 
 
 
